@@ -1,0 +1,12 @@
+language: java
+
+sudo: true
+
+bundler_args: --retry 3
+
+script: mvn verify jacoco:report coveralls:report -DrepoToken=$COVERALLS_TOKEN
+
+notifications:
+  email:
+    on_sucess: never
+    on_failure: always
