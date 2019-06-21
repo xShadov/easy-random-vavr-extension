@@ -21,11 +21,13 @@ import io.github.xshadov.easyrandom.vavr.VavrMapRandomizer;
 import io.github.xshadov.easyrandom.vavr.VavrMultimapRandomizer;
 import io.github.xshadov.easyrandom.vavr.VavrPriorityQueueRandomizer;
 import io.github.xshadov.easyrandom.vavr.VavrSetRandomizer;
+import io.github.xshadov.easyrandom.vavr.factory.exception.GenericParameterNotComparableException;
 import io.vavr.collection.TreeMap;
 import io.vavr.collection.TreeMultimap;
 import io.vavr.collection.TreeSet;
 import lombok.Value;
 import org.jeasy.random.api.Randomizer;
+import org.jeasy.random.util.ReflectionUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -50,8 +52,8 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 	private <V extends Comparable<V>> Randomizer<?> priorityQueueRandomizer(final ParameterizedType genericType) {
 		final Type type = genericType.getActualTypeArguments()[0];
 
-		if (!isComparable(type))
-			throw new IllegalArgumentException(type.getTypeName() + " does not implement Comparable");
+		if (!implementsComparable(type))
+			throw new GenericParameterNotComparableException(type.getTypeName());
 
 		return VavrPriorityQueueRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer(type))
@@ -63,8 +65,8 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 		final Type keyType = genericType.getActualTypeArguments()[0];
 		final Type valueType = genericType.getActualTypeArguments()[1];
 
-		if (!isComparable(keyType))
-			throw new IllegalArgumentException(keyType.getTypeName() + " does not implement Comparable");
+		if (!implementsComparable(keyType))
+			throw new GenericParameterNotComparableException(keyType.getTypeName());
 
 		return VavrMultimapRandomizer.<K, V>builder()
 				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
@@ -78,8 +80,8 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 		final Type keyType = genericType.getActualTypeArguments()[0];
 		final Type valueType = genericType.getActualTypeArguments()[1];
 
-		if (!isComparable(keyType))
-			throw new IllegalArgumentException(keyType.getTypeName() + " does not implement Comparable");
+		if (!implementsComparable(keyType))
+			throw new GenericParameterNotComparableException(keyType.getTypeName());
 
 		return VavrMapRandomizer.<K, V>builder()
 				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
@@ -92,8 +94,8 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 	private <V extends Comparable<V>> Randomizer<?> sortedSetRandomizer(final ParameterizedType genericType) {
 		final Type type = genericType.getActualTypeArguments()[0];
 
-		if (!isComparable(type))
-			throw new IllegalArgumentException(type.getTypeName() + " does not implement Comparable");
+		if (!implementsComparable(type))
+			throw new GenericParameterNotComparableException(type.getTypeName());
 
 		return VavrSetRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer(type))
@@ -102,7 +104,10 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 				.build();
 	}
 
-	private boolean isComparable(final Type type) {
+	private boolean implementsComparable(final Type type) {
+		if (ReflectionUtils.isParameterizedType(type))
+			return false;
+
 		return Comparable.class.isAssignableFrom((Class<?>) type);
 	}
 }

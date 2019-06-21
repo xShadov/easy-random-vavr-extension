@@ -15,34 +15,30 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr.foldable;
+package io.github.xshadov.easyrandom.vavr.collection;
 
 import io.github.xshadov.easyrandom.vavr.VavrGenerationTests;
-import io.vavr.collection.Array;
-import io.vavr.collection.List;
+import io.vavr.collection.IndexedSeq;
+import io.vavr.collection.LinearSeq;
 import lombok.Value;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class ArrayRandomizeTest {
+public class IndexedSeqRandomizeTest {
 	@Value
 	private static class Person {
-		private Array<String> array;
-		private Array<Array<String>> nestedArray;
-		private Array<List<String>> nestedListArray;
+		private IndexedSeq<String> sequence;
+		private IndexedSeq<LinearSeq<String>> nestedSequence;
 	}
 
 	@Test
 	public void correctRandomization() {
 		final Person randomPerson = VavrGenerationTests.random(Person.class);
 
-		assertThat(randomPerson.getArray().size()).isBetween(2, 5);
+		assertThat(randomPerson.getSequence().size()).isBetween(2, 5);
 
-		assertThat(randomPerson.getNestedArray().size()).isBetween(2, 5);
-		randomPerson.getNestedArray().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
-
-		assertThat(randomPerson.getNestedListArray().size()).isBetween(2, 5);
-		randomPerson.getNestedListArray().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertThat(randomPerson.getNestedSequence().size()).isBetween(2, 5);
+		randomPerson.getNestedSequence().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
 	}
 }

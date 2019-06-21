@@ -44,8 +44,8 @@ public class VavrRandomizerFactory {
 		if (VavrTypes.isMap(fieldType))
 			return mapRandomizer().of(fieldType, genericType);
 
-		if (VavrTypes.isFoldable(fieldType))
-			return foldableRandomizer().of(fieldType, genericType);
+		if (VavrTypes.isCollection(fieldType))
+			return collectionRandomizer().of(fieldType, genericType);
 
 		if (VavrTypes.isMultimap(fieldType))
 			return multimapRandomizer().of(fieldType, genericType);
@@ -57,8 +57,8 @@ public class VavrRandomizerFactory {
 		return new MultimapRandomizerFactory(this);
 	}
 
-	private FoldableRandomizerFactory foldableRandomizer() {
-		return new FoldableRandomizerFactory(this);
+	private CollectionRandomizerFactory collectionRandomizer() {
+		return new CollectionRandomizerFactory(this);
 	}
 
 	private ComparableRandomizerFactory comparableRandomizer() {

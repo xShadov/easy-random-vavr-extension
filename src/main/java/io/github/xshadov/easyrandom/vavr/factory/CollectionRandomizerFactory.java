@@ -26,7 +26,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 @Value
-class FoldableRandomizerFactory implements CommonRandomizerFactory {
+class CollectionRandomizerFactory implements CommonRandomizerFactory {
 	private VavrRandomizerFactory factory;
 
 	public Randomizer<?> of(final Class<?> fieldType, final Type genericType) {

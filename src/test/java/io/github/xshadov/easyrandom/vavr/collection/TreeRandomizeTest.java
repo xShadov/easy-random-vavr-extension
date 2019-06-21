@@ -15,30 +15,30 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr.foldable;
+package io.github.xshadov.easyrandom.vavr.collection;
 
 import io.github.xshadov.easyrandom.vavr.VavrGenerationTests;
 import io.vavr.collection.List;
-import io.vavr.collection.Stream;
+import io.vavr.collection.Tree;
 import lombok.Value;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class StreamRandomizeTest {
+public class TreeRandomizeTest {
 	@Value
 	private static class Person {
-		private Stream<String> stream;
-		private Stream<List<String>> listStream;
+		private Tree<String> tree;
+		private Tree<List<String>> listTree;
 	}
 
 	@Test
 	public void correctRandomization() {
 		final Person randomPerson = VavrGenerationTests.random(Person.class);
 
-		assertThat(randomPerson.getStream().size()).isBetween(2, 5);
+		assertThat(randomPerson.getTree().size()).isBetween(2, 5);
 
-		assertThat(randomPerson.getListStream().size()).isBetween(2, 5);
-		randomPerson.getListStream().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertThat(randomPerson.getListTree().size()).isBetween(2, 5);
+		randomPerson.getListTree().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
 	}
 }

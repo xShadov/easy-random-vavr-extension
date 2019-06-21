@@ -24,7 +24,7 @@ enum VavrTypes {
 	SET_TYPES(Set.class, SortedSet.class, HashSet.class, LinkedHashSet.class, TreeSet.class),
 	MAP_TYPES(Map.class, HashMap.class, SortedMap.class, TreeMap.class, LinkedHashMap.class),
 	MULTIMAP_TYPES(Multimap.class, SortedMultimap.class, TreeMultimap.class, HashMultimap.class, LinkedHashMultimap.class),
-	FOLDABLE_TYPES(IndexedSeq.class, Stream.class, Array.class, Vector.class, Queue.class, Tree.class),
+	COLLECTION_TYPES(IndexedSeq.class, Stream.class, Array.class, Vector.class, Queue.class, PriorityQueue.class, Tree.class),
 	COMPARABLE_TYPES(SortedSet.class, TreeSet.class, TreeMap.class, SortedMap.class, SortedMultimap.class, TreeMultimap.class, PriorityQueue.class);
 
 	private List<Class<?>> types;
@@ -53,7 +53,7 @@ enum VavrTypes {
 		return MULTIMAP_TYPES.types.contains(type);
 	}
 
-	public static boolean isFoldable(final Class<?> type) {
-		return FOLDABLE_TYPES.types.contains(type);
+	public static boolean isCollection(final Class<?> type) {
+		return COLLECTION_TYPES.types.contains(type);
 	}
 }

@@ -15,30 +15,34 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr.foldable;
+package io.github.xshadov.easyrandom.vavr.collection;
 
 import io.github.xshadov.easyrandom.vavr.VavrGenerationTests;
+import io.vavr.collection.Array;
 import io.vavr.collection.List;
-import io.vavr.collection.Tree;
 import lombok.Value;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class TreeRandomizeTest {
+public class ArrayRandomizeTest {
 	@Value
 	private static class Person {
-		private Tree<String> tree;
-		private Tree<List<String>> listTree;
+		private Array<String> array;
+		private Array<Array<String>> nestedArray;
+		private Array<List<String>> nestedListArray;
 	}
 
 	@Test
 	public void correctRandomization() {
 		final Person randomPerson = VavrGenerationTests.random(Person.class);
 
-		assertThat(randomPerson.getTree().size()).isBetween(2, 5);
+		assertThat(randomPerson.getArray().size()).isBetween(2, 5);
 
-		assertThat(randomPerson.getListTree().size()).isBetween(2, 5);
-		randomPerson.getListTree().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertThat(randomPerson.getNestedArray().size()).isBetween(2, 5);
+		randomPerson.getNestedArray().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+
+		assertThat(randomPerson.getNestedListArray().size()).isBetween(2, 5);
+		randomPerson.getNestedListArray().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
 	}
 }

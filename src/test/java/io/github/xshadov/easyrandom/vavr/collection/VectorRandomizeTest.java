@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr.foldable;
+package io.github.xshadov.easyrandom.vavr.collection;
 
 import io.github.xshadov.easyrandom.vavr.VavrGenerationTests;
 import io.vavr.collection.List;
