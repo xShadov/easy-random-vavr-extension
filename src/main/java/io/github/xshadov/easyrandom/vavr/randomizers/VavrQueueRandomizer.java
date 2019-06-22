@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr;
+package io.github.xshadov.easyrandom.vavr.randomizers;
 
-import io.vavr.collection.PriorityQueue;
+import io.vavr.collection.Queue;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandomParameters;
@@ -27,12 +27,12 @@ import java.util.function.Supplier;
 
 @Getter
 @Builder
-public class VavrPriorityQueueRandomizer<T> extends AbstractRandomizer<PriorityQueue<T>> implements VavrCollectionRandomizer<T, PriorityQueue<T>> {
+class VavrQueueRandomizer<T> extends AbstractRandomizer<Queue<T>> implements VavrCollectionRandomizer<T, Queue<T>> {
 	private Supplier<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 
 	@Override
-	public PriorityQueue<T> getRandomValue() {
-		return getRandomCollection(PriorityQueue.collector());
+	public Queue<T> getRandomValue() {
+		return getRandomCollection(Queue.collector());
 	}
 }

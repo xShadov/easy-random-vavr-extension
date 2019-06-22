@@ -17,14 +17,8 @@
 
 package io.github.xshadov.easyrandom.vavr.factory;
 
-import io.github.xshadov.easyrandom.vavr.VavrMapRandomizer;
-import io.github.xshadov.easyrandom.vavr.VavrMultimapRandomizer;
-import io.github.xshadov.easyrandom.vavr.VavrPriorityQueueRandomizer;
-import io.github.xshadov.easyrandom.vavr.VavrSetRandomizer;
-import io.github.xshadov.easyrandom.vavr.factory.exception.GenericParameterNotComparableException;
-import io.vavr.collection.TreeMap;
-import io.vavr.collection.TreeMultimap;
-import io.vavr.collection.TreeSet;
+import io.github.xshadov.easyrandom.vavr.exception.GenericParameterNotComparableException;
+import io.github.xshadov.easyrandom.vavr.randomizers.VavrRandomizers;
 import lombok.Value;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.util.ReflectionUtils;
@@ -37,71 +31,41 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 	private VavrRandomizerFactory factory;
 
 	public Randomizer<?> of(final Class<?> fieldType, final Type genericType) {
-		if (VavrTypes.isSet(fieldType))
-			return sortedSetRandomizer((ParameterizedType) genericType);
+		if (VavrTypes.isSet(fieldType)) {
+			final Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
-		if (VavrTypes.isMap(fieldType))
-			return sortedMapRandomizer((ParameterizedType) genericType);
+			if (!implementsComparable(type))
+				throw new GenericParameterNotComparableException(type.getTypeName());
 
-		if (VavrTypes.isMultimap(fieldType))
-			return sortedMultimapRandomizer((ParameterizedType) genericType);
+			return VavrRandomizers.sortedSet(this.<Comparable>valueRandomizer(type), factory.getParameters().getCollectionSizeRange());
+		}
 
-		return priorityQueueRandomizer((ParameterizedType) genericType);
-	}
+		if (VavrTypes.isMap(fieldType)) {
+			final Type keyType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+			final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[1];
 
-	private <V extends Comparable<V>> Randomizer<?> priorityQueueRandomizer(final ParameterizedType genericType) {
-		final Type type = genericType.getActualTypeArguments()[0];
+			if (!implementsComparable(keyType))
+				throw new GenericParameterNotComparableException(keyType.getTypeName());
 
-		if (!implementsComparable(type))
-			throw new GenericParameterNotComparableException(type.getTypeName());
+			return VavrRandomizers.sortedMap(this.<Comparable>valueRandomizer(keyType), valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
+		}
 
-		return VavrPriorityQueueRandomizer.<V>builder()
-				.valueRandomizer(valueRandomizer(type))
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.build();
-	}
+		if (VavrTypes.isMultimap(fieldType)) {
+			final Type keyType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+			final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[1];
 
-	private <K extends Comparable<K>, V> Randomizer<?> sortedMultimapRandomizer(final ParameterizedType genericType) {
-		final Type keyType = genericType.getActualTypeArguments()[0];
-		final Type valueType = genericType.getActualTypeArguments()[1];
+			if (!implementsComparable(keyType))
+				throw new GenericParameterNotComparableException(keyType.getTypeName());
 
-		if (!implementsComparable(keyType))
-			throw new GenericParameterNotComparableException(keyType.getTypeName());
+			return VavrRandomizers.sortedMultimap(this.<Comparable>valueRandomizer(keyType), valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
+		}
 
-		return VavrMultimapRandomizer.<K, V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.keyRandomizer(valueRandomizer(keyType))
-				.valueRandomizer(valueRandomizer(valueType))
-				.collector(TreeMultimap.withSeq().collector())
-				.build();
-	}
-
-	private <K extends Comparable<K>, V> Randomizer<?> sortedMapRandomizer(final ParameterizedType genericType) {
-		final Type keyType = genericType.getActualTypeArguments()[0];
-		final Type valueType = genericType.getActualTypeArguments()[1];
-
-		if (!implementsComparable(keyType))
-			throw new GenericParameterNotComparableException(keyType.getTypeName());
-
-		return VavrMapRandomizer.<K, V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.keyRandomizer(valueRandomizer(keyType))
-				.valueRandomizer(valueRandomizer(valueType))
-				.collector(TreeMap.collector())
-				.build();
-	}
-
-	private <V extends Comparable<V>> Randomizer<?> sortedSetRandomizer(final ParameterizedType genericType) {
-		final Type type = genericType.getActualTypeArguments()[0];
+		final Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
 		if (!implementsComparable(type))
 			throw new GenericParameterNotComparableException(type.getTypeName());
 
-		return VavrSetRandomizer.<V>builder()
-				.valueRandomizer(valueRandomizer(type))
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.collector(TreeSet.collector())
-				.build();
+		return VavrRandomizers.priorityQueue(this.<Comparable>valueRandomizer(type), factory.getParameters().getCollectionSizeRange());
 	}
 
 	private boolean implementsComparable(final Type type) {

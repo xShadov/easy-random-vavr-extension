@@ -17,7 +17,7 @@
 
 package io.github.xshadov.easyrandom.vavr.factory;
 
-import io.github.xshadov.easyrandom.vavr.*;
+import io.github.xshadov.easyrandom.vavr.randomizers.VavrRandomizers;
 import io.vavr.collection.*;
 import lombok.Value;
 import org.jeasy.random.api.Randomizer;
@@ -33,55 +33,20 @@ class CollectionRandomizerFactory implements CommonRandomizerFactory {
 		final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
 		if (IndexedSeq.class.equals(fieldType))
-			return arrayRandomizer(valueType);
+			return VavrRandomizers.array(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
 		if (Array.class.equals(fieldType))
-			return arrayRandomizer(valueType);
+			return VavrRandomizers.array(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
 		if (Vector.class.equals(fieldType))
-			return vectorRandomizer(valueType);
+			return VavrRandomizers.vector(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
 		if (Tree.class.equals(fieldType))
-			return treeRandomizer(valueType);
+			return VavrRandomizers.tree(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
 		if (Queue.class.equals(fieldType))
-			return queueRandomizer(valueType);
+			return VavrRandomizers.queue(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
-		return streamRandomizer(valueType);
-	}
-
-	private <V> Randomizer<?> arrayRandomizer(final Type valueType) {
-		return VavrArrayRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.build();
-	}
-
-	private <V> Randomizer<?> vectorRandomizer(final Type valueType) {
-		return VavrVectorRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.build();
-	}
-
-	private <V> Randomizer<?> treeRandomizer(final Type valueType) {
-		return VavrTreeRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.build();
-	}
-
-	private <V> Randomizer<?> queueRandomizer(final Type valueType) {
-		return VavrQueueRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.build();
-	}
-
-	private <V> Randomizer<?> streamRandomizer(final Type valueType) {
-		return VavrStreamRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.build();
+		return VavrRandomizers.stream(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 	}
 }

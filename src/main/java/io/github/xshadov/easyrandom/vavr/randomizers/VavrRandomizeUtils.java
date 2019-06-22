@@ -15,24 +15,18 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr;
+package io.github.xshadov.easyrandom.vavr.randomizers;
 
-import io.vavr.collection.Queue;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import org.jeasy.random.EasyRandomParameters;
-import org.jeasy.random.randomizers.AbstractRandomizer;
 
-import java.util.function.Supplier;
+import java.util.concurrent.ThreadLocalRandom;
 
-@Getter
-@Builder
-public class VavrQueueRandomizer<T> extends AbstractRandomizer<Queue<T>> implements VavrCollectionRandomizer<T, Queue<T>> {
-	private Supplier<? extends T> valueRandomizer;
-	private EasyRandomParameters.Range<Integer> collectionSizeRange;
+@UtilityClass
+class VavrRandomizeUtils {
+	private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
 
-	@Override
-	public Queue<T> getRandomValue() {
-		return getRandomCollection(Queue.collector());
+	static int randomSize(EasyRandomParameters.Range<Integer> range) {
+		return RANDOM.nextInt(range.getMin(), range.getMax());
 	}
 }

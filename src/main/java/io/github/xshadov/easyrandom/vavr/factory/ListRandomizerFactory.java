@@ -17,7 +17,7 @@
 
 package io.github.xshadov.easyrandom.vavr.factory;
 
-import io.github.xshadov.easyrandom.vavr.VavrListRandomizer;
+import io.github.xshadov.easyrandom.vavr.randomizers.VavrRandomizers;
 import lombok.Value;
 import org.jeasy.random.api.Randomizer;
 
@@ -29,15 +29,7 @@ class ListRandomizerFactory implements CommonRandomizerFactory {
 	private VavrRandomizerFactory factory;
 
 	public Randomizer<?> of(final Type genericType) {
-		return listRandomizer((ParameterizedType) genericType);
-	}
-
-	private <V> Randomizer<?> listRandomizer(final ParameterizedType genericType) {
-		final Type valueType = genericType.getActualTypeArguments()[0];
-
-		return VavrListRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.build();
+		final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+		return VavrRandomizers.list(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 	}
 }

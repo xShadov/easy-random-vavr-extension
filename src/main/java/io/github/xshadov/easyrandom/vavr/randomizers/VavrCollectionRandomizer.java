@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr;
+package io.github.xshadov.easyrandom.vavr.randomizers;
 
 import io.vavr.collection.List;
 import org.jeasy.random.EasyRandomParameters;
@@ -23,7 +23,7 @@ import org.jeasy.random.EasyRandomParameters;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-public interface VavrCollectionRandomizer<T, C> {
+interface VavrCollectionRandomizer<T, C> {
 	int ATTEMPT_THRESHOLD = 3;
 
 	Supplier<? extends T> getValueRandomizer();

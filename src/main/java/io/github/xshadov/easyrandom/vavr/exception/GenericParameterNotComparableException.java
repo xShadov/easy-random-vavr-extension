@@ -1,4 +1,4 @@
-package io.github.xshadov.easyrandom.vavr.factory.exception;
+package io.github.xshadov.easyrandom.vavr.exception;
 
 public class GenericParameterNotComparableException extends RuntimeException {
 	public GenericParameterNotComparableException(final String type) {

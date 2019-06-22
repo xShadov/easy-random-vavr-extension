@@ -18,7 +18,7 @@
 package io.github.xshadov.easyrandom.vavr.comparable;
 
 import io.github.xshadov.easyrandom.vavr.VavrGenerationTests;
-import io.github.xshadov.easyrandom.vavr.factory.exception.GenericParameterNotComparableException;
+import io.github.xshadov.easyrandom.vavr.exception.GenericParameterNotComparableException;
 import io.vavr.collection.List;
 import io.vavr.collection.SortedMap;
 import io.vavr.collection.SortedMultimap;

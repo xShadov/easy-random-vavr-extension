@@ -17,17 +17,12 @@
 
 package io.github.xshadov.easyrandom.vavr.factory;
 
-import io.github.xshadov.easyrandom.vavr.VavrSetRandomizer;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.LinkedHashSet;
-import io.vavr.collection.Set;
+import io.github.xshadov.easyrandom.vavr.randomizers.VavrRandomizers;
 import lombok.Value;
 import org.jeasy.random.api.Randomizer;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.stream.Collector;
 
 @Value
 class SetRandomizerFactory implements CommonRandomizerFactory {
@@ -37,16 +32,10 @@ class SetRandomizerFactory implements CommonRandomizerFactory {
 		final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
 		if (io.vavr.collection.LinkedHashSet.class.equals(fieldType))
-			return setRandomizer(valueType, LinkedHashSet.collector());
+			return VavrRandomizers.linkedHashSet(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
-		return setRandomizer(valueType, HashSet.collector());
+		return VavrRandomizers.hashSet(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 	}
 
-	private <V> Randomizer<?> setRandomizer(final Type valueType, final Collector<V, ArrayList<V>, ? extends Set<V>> collector) {
-		return VavrSetRandomizer.<V>builder()
-				.collectionSizeRange(factory.getParameters().getCollectionSizeRange())
-				.valueRandomizer(valueRandomizer(valueType))
-				.collector(collector)
-				.build();
-	}
+
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr;
+package io.github.xshadov.easyrandom.vavr.randomizers;
 
 import io.vavr.Tuple2;
 import io.vavr.collection.*;
@@ -29,15 +29,15 @@ import java.util.stream.Collector;
 
 @Getter
 @Builder
-public class VavrMultimapRandomizer<S, T> extends AbstractRandomizer<Multimap<S, T>> implements VavrCollectionRandomizer<S, Set<S>> {
+class VavrMapRandomizer<S, T> extends AbstractRandomizer<Map<S, T>> implements VavrCollectionRandomizer<S, Set<S>> {
 	private Supplier<? extends S> keyRandomizer;
 	private Supplier<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 	@Builder.Default
-	private Collector<Tuple2<S, T>, ?, ? extends Multimap<S, T>> collector = HashMultimap.withSeq().collector();
+	private Collector<Tuple2<S, T>, ?, ? extends Map<S, T>> collector = HashMap.collector();
 
 	@Override
-	public Multimap<S, T> getRandomValue() {
+	public Map<S, T> getRandomValue() {
 		final Set<S> keys = getDistinctCollection(HashSet.collector());
 		final List<T> values = List.fill(keys.size(), valueRandomizer);
 

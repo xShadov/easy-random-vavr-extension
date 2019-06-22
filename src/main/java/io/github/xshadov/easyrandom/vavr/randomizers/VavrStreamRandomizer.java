@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr;
+package io.github.xshadov.easyrandom.vavr.randomizers;
 
-import io.vavr.collection.List;
+import io.vavr.collection.Stream;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandomParameters;
@@ -27,12 +27,12 @@ import java.util.function.Supplier;
 
 @Getter
 @Builder
-public class VavrListRandomizer<T> extends AbstractRandomizer<List<T>> implements VavrCollectionRandomizer<T, List<T>> {
+class VavrStreamRandomizer<T> extends AbstractRandomizer<Stream<T>> implements VavrCollectionRandomizer<T, Stream<T>> {
 	private Supplier<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 
 	@Override
-	public List<T> getRandomValue() {
-		return getRandomCollection(List.collector());
+	public Stream<T> getRandomValue() {
+		return getRandomCollection(Stream.collector());
 	}
 }

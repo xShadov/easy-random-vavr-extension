@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package io.github.xshadov.easyrandom.vavr;
+package io.github.xshadov.easyrandom.vavr.randomizers;
 
-import io.vavr.Tuple2;
-import io.vavr.collection.*;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.Set;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandomParameters;
@@ -29,24 +29,14 @@ import java.util.stream.Collector;
 
 @Getter
 @Builder
-public class VavrMapRandomizer<S, T> extends AbstractRandomizer<Map<S, T>> implements VavrCollectionRandomizer<S, Set<S>> {
-	private Supplier<? extends S> keyRandomizer;
+class VavrSetRandomizer<T> extends AbstractRandomizer<Set<T>> implements VavrCollectionRandomizer<T, Set<T>> {
 	private Supplier<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 	@Builder.Default
-	private Collector<Tuple2<S, T>, ?, ? extends Map<S, T>> collector = HashMap.collector();
+	private Collector<T, ?, ? extends Set<T>> collector = HashSet.collector();
 
 	@Override
-	public Map<S, T> getRandomValue() {
-		final Set<S> keys = getDistinctCollection(HashSet.collector());
-		final List<T> values = List.fill(keys.size(), valueRandomizer);
-
-		return keys.zip(values)
-				   .collect(collector);
-	}
-
-	@Override
-	public Supplier<? extends S> getValueRandomizer() {
-		return keyRandomizer;
+	public Set<T> getRandomValue() {
+		return getDistinctCollection(collector);
 	}
 }
