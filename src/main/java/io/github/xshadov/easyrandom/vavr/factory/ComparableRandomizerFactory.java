@@ -35,7 +35,7 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 			final Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
 			if (!implementsComparable(type))
-				throw new GenericParameterNotComparableException(type.getTypeName());
+				throw new GenericParameterNotComparableException(type);
 
 			return VavrRandomizers.sortedSet(this.<Comparable>valueRandomizer(type), factory.getParameters().getCollectionSizeRange());
 		}
@@ -45,7 +45,7 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 			final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[1];
 
 			if (!implementsComparable(keyType))
-				throw new GenericParameterNotComparableException(keyType.getTypeName());
+				throw new GenericParameterNotComparableException(keyType);
 
 			return VavrRandomizers.sortedMap(this.<Comparable>valueRandomizer(keyType), valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 		}
@@ -55,7 +55,7 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 			final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[1];
 
 			if (!implementsComparable(keyType))
-				throw new GenericParameterNotComparableException(keyType.getTypeName());
+				throw new GenericParameterNotComparableException(keyType);
 
 			return VavrRandomizers.sortedMultimap(this.<Comparable>valueRandomizer(keyType), valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 		}
@@ -63,7 +63,7 @@ class ComparableRandomizerFactory implements CommonRandomizerFactory {
 		final Type type = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
 		if (!implementsComparable(type))
-			throw new GenericParameterNotComparableException(type.getTypeName());
+			throw new GenericParameterNotComparableException(type);
 
 		return VavrRandomizers.priorityQueue(this.<Comparable>valueRandomizer(type), factory.getParameters().getCollectionSizeRange());
 	}

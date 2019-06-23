@@ -18,12 +18,18 @@
 package io.github.xshadov.easyrandom.vavr.randomizers;
 
 import io.vavr.collection.*;
+import lombok.experimental.UtilityClass;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.api.Randomizer;
 
 import java.util.function.Supplier;
 
+@UtilityClass
 public class VavrRandomizers {
+	public static Randomizer<?> empty(Class<?> clazz) {
+		return VavrEmptyRandomizers.from(clazz).getOrNull();
+	}
+
 	public static <V> Randomizer<?> array(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrArrayRandomizer.<V>builder()
 				.collectionSizeRange(collectionSizeRange)

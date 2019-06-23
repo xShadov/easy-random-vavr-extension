@@ -30,6 +30,7 @@ class ListRandomizerFactory implements CommonRandomizerFactory {
 
 	public Randomizer<?> of(final Type genericType) {
 		final Type valueType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+
 		return VavrRandomizers.list(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 	}
 }

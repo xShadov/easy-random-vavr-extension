@@ -17,6 +17,7 @@
 
 package io.github.xshadov.easyrandom.vavr.factory;
 
+import io.github.xshadov.easyrandom.vavr.randomizers.VavrRandomizers;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.util.ReflectionUtils;
 
@@ -36,7 +37,12 @@ interface CommonRandomizerFactory {
 			final Randomizer<V> subRandomizer = (Randomizer<V>) getFactory().fromTypes((Class<?>) nestedParametrizedType.getRawType(), nestedParametrizedType);
 			randomizer = subRandomizer::getRandomValue;
 		} else {
-			randomizer = () -> getFactory().getEasyRandom().nextObject((Class<V>) type);
+			final Class<V> rawType = (Class<V>) type;
+
+			if (VavrTypes.contains(rawType))
+				randomizer = () -> (V) VavrRandomizers.empty(rawType).getRandomValue();
+			else
+				randomizer = () -> getFactory().getEasyRandom().nextObject(rawType);
 		}
 
 		return randomizer;

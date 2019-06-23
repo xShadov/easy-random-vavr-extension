@@ -1,11 +1,10 @@
 # easy-random-vavr-extension
-====
 
 [![Build Status](https://travis-ci.com/xShadov/easy-random-vavr-extension.svg?branch=master)](https://travis-ci.org/xShadov/easy-random-vavr-extension)
 [![Coverage Status](https://coveralls.io/repos/github/xShadov/easy-random-vavr-extension/badge.svg?branch=master)](https://coveralls.io/github/xShadov/easy-random-vavr-extension?branch=master)
 [![GitHub Release](https://img.shields.io/github/release/xShadov/easy-random-vavr-extension.svg)](https://github.com/xShadov/easy-random-vavr-extension/releases)
 
-Extension for [easy-random library](https://github.com/j-easy/easy-random) adding functionality of generating [vavr](https://github.com/vavr-io/vavr) collection types (`Set`, `List`, `Map` etc.). Supports nested generic types, for example `Map<String, Map<String, List<String>>>`
+Extension for [Easy-Random library](https://github.com/j-easy/easy-random) adding functionality of generating [VAVR](https://github.com/vavr-io/vavr) collection types (`Set`, `List`, `Map` etc.). Supports nested generic types, for example `Map<String, Map<String, List<String>>>`
 
 ## Usage
 ```java

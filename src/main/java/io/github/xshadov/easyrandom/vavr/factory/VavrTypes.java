@@ -18,6 +18,10 @@
 package io.github.xshadov.easyrandom.vavr.factory;
 
 import io.vavr.collection.*;
+import org.jeasy.random.util.ReflectionUtils;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 enum VavrTypes {
 	LIST_TYPES(Foldable.class, Traversable.class, Seq.class, LinearSeq.class, List.class),
@@ -55,5 +59,25 @@ enum VavrTypes {
 
 	public static boolean isCollection(final Class<?> type) {
 		return COLLECTION_TYPES.types.contains(type);
+	}
+
+	public static boolean contains(final Class<?> type) {
+		return isCollection(type) || isMap(type) || isMultimap(type) || isSet(type) || isList(type);
+	}
+
+	public static boolean needsEmptyRandomizer(final Class<?> fieldType, Type genericType) {
+		if (!ReflectionUtils.isParameterizedType(genericType))
+			return true;
+
+		if (VavrTypes.isMap(fieldType) || VavrTypes.isMultimap(fieldType)) {
+			final Type keyGenericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+			final Type valueGenericType = ((ParameterizedType) genericType).getActualTypeArguments()[1];
+
+			return ReflectionUtils.isWildcardType(keyGenericType) || ReflectionUtils.isWildcardType(valueGenericType);
+		} else {
+			final Type firstGenericType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+
+			return ReflectionUtils.isWildcardType(firstGenericType);
+		}
 	}
 }

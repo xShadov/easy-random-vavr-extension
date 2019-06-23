@@ -29,25 +29,28 @@ import java.lang.reflect.Type;
 
 @Priority(-3)
 public class VavrRandomizerRegistry implements RandomizerRegistry {
-	private VavrRandomizerFactory vavrRandomizerFactory;
 	private EasyRandomParameters easyRandomParameters;
 	private EasyRandom easyRandom;
+
+	public VavrRandomizerRegistry() {
+
+	}
+
+	public VavrRandomizerRegistry(EasyRandom easyRandom) {
+		this.easyRandom = easyRandom;
+	}
 
 	@Override
 	public void init(EasyRandomParameters parameters) {
 		this.easyRandomParameters = parameters;
-		initializeFactory();
 	}
 
 	@Override
 	public Randomizer<?> getRandomizer(final Field field) {
 		final Class<?> fieldType = field.getType();
+		final Type genericType = field.getGenericType();
 
-		return randomizerForType(fieldType, field.getGenericType());
-	}
-
-	private Randomizer<?> randomizerForType(final Class<?> fieldType, final Type genericType) {
-		return vavrRandomizerFactory.fromTypes(fieldType, genericType);
+		return factory().fromTypes(fieldType, genericType);
 	}
 
 	@Override
@@ -58,11 +61,13 @@ public class VavrRandomizerRegistry implements RandomizerRegistry {
 
 	public void setEasyRandom(EasyRandom easyRandom) {
 		this.easyRandom = easyRandom;
-		initializeFactory();
 	}
 
-	private void initializeFactory() {
-		this.vavrRandomizerFactory = VavrRandomizerFactory
+	private VavrRandomizerFactory factory() {
+		if (easyRandom == null)
+			throw new IllegalStateException("Provide EasyRandom instance to VavrRandomizerRegistry");
+
+		return VavrRandomizerFactory
 				.builder()
 				.easyRandom(easyRandom)
 				.parameters(easyRandomParameters)

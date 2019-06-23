@@ -35,8 +35,8 @@ class CollectionRandomizerFactory implements CommonRandomizerFactory {
 		if (IndexedSeq.class.equals(fieldType))
 			return VavrRandomizers.array(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
-		if (Array.class.equals(fieldType))
-			return VavrRandomizers.array(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
+		if (Stream.class.equals(fieldType))
+			return VavrRandomizers.stream(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
 		if (Vector.class.equals(fieldType))
 			return VavrRandomizers.vector(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
@@ -47,6 +47,6 @@ class CollectionRandomizerFactory implements CommonRandomizerFactory {
 		if (Queue.class.equals(fieldType))
 			return VavrRandomizers.queue(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 
-		return VavrRandomizers.stream(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
+		return VavrRandomizers.array(valueRandomizer(valueType), factory.getParameters().getCollectionSizeRange());
 	}
 }

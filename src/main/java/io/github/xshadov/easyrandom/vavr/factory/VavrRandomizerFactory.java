@@ -17,6 +17,7 @@
 
 package io.github.xshadov.easyrandom.vavr.factory;
 
+import io.github.xshadov.easyrandom.vavr.randomizers.VavrRandomizers;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandom;
@@ -32,6 +33,12 @@ public class VavrRandomizerFactory {
 	private EasyRandomParameters parameters;
 
 	public Randomizer<?> fromTypes(final Class<?> fieldType, final Type genericType) {
+		if (!VavrTypes.contains(fieldType))
+			return null;
+
+		if (VavrTypes.needsEmptyRandomizer(fieldType, genericType))
+			return VavrRandomizers.empty(fieldType);
+
 		if (VavrTypes.isComparable(fieldType))
 			return comparableRandomizer().of(fieldType, genericType);
 
@@ -44,13 +51,10 @@ public class VavrRandomizerFactory {
 		if (VavrTypes.isMap(fieldType))
 			return mapRandomizer().of(fieldType, genericType);
 
-		if (VavrTypes.isCollection(fieldType))
-			return collectionRandomizer().of(fieldType, genericType);
-
 		if (VavrTypes.isMultimap(fieldType))
 			return multimapRandomizer().of(fieldType, genericType);
 
-		return null;
+		return collectionRandomizer().of(fieldType, genericType);
 	}
 
 	private MultimapRandomizerFactory multimapRandomizer() {
