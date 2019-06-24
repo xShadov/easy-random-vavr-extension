@@ -22,15 +22,15 @@ import io.vavr.collection.Set;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandomParameters;
+import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.randomizers.AbstractRandomizer;
 
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 @Getter
 @Builder
 class VavrSetRandomizer<T> extends AbstractRandomizer<Set<T>> implements VavrCollectionRandomizer<T, Set<T>> {
-	private Supplier<? extends T> valueRandomizer;
+	private Randomizer<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 	@Builder.Default
 	private Collector<T, ?, ? extends Set<T>> collector = HashSet.collector();

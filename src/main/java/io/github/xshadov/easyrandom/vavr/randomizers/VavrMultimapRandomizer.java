@@ -22,16 +22,16 @@ import io.vavr.collection.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandomParameters;
+import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.randomizers.AbstractRandomizer;
 
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 @Getter
 @Builder
 class VavrMultimapRandomizer<S, T> extends AbstractRandomizer<Multimap<S, T>> implements VavrCollectionRandomizer<S, Set<S>> {
-	private Supplier<? extends S> keyRandomizer;
-	private Supplier<? extends T> valueRandomizer;
+	private Randomizer<? extends S> keyRandomizer;
+	private Randomizer<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 	@Builder.Default
 	private Collector<Tuple2<S, T>, ?, ? extends Multimap<S, T>> collector = HashMultimap.withSeq().collector();
@@ -39,14 +39,14 @@ class VavrMultimapRandomizer<S, T> extends AbstractRandomizer<Multimap<S, T>> im
 	@Override
 	public Multimap<S, T> getRandomValue() {
 		final Set<S> keys = getDistinctCollection(HashSet.collector());
-		final List<T> values = List.fill(keys.size(), valueRandomizer);
+		final List<T> values = List.fill(keys.size(), () -> valueRandomizer.getRandomValue());
 
 		return keys.zip(values)
 				   .collect(collector);
 	}
 
 	@Override
-	public Supplier<? extends S> getValueRandomizer() {
+	public Randomizer<? extends S> getValueRandomizer() {
 		return keyRandomizer;
 	}
 }

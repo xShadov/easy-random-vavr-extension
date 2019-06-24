@@ -23,24 +23,22 @@ import org.jeasy.random.util.ReflectionUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.function.Supplier;
 
 interface CommonRandomizerFactory {
 	VavrRandomizerFactory getFactory();
 
-	default <V> Supplier<V> valueRandomizer(final Type type) {
-		final Supplier<V> randomizer;
+	default <V> Randomizer<V> valueRandomizer(final Type type) {
+		final Randomizer<V> randomizer;
 
 		if (ReflectionUtils.isParameterizedType(type)) {
 			final ParameterizedType nestedParametrizedType = (ParameterizedType) type;
 
-			final Randomizer<V> subRandomizer = (Randomizer<V>) getFactory().fromTypes((Class<?>) nestedParametrizedType.getRawType(), nestedParametrizedType);
-			randomizer = subRandomizer::getRandomValue;
+			randomizer = (Randomizer<V>) getFactory().fromTypes((Class<?>) nestedParametrizedType.getRawType(), nestedParametrizedType);
 		} else {
 			final Class<V> rawType = (Class<V>) type;
 
 			if (VavrTypes.contains(rawType))
-				randomizer = () -> (V) VavrRandomizers.empty(rawType).getRandomValue();
+				randomizer = (Randomizer<V>) VavrRandomizers.empty(rawType);
 			else
 				randomizer = () -> getFactory().getEasyRandom().nextObject(rawType);
 		}

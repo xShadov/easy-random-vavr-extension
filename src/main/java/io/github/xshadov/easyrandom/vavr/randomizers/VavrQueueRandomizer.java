@@ -21,14 +21,13 @@ import io.vavr.collection.Queue;
 import lombok.Builder;
 import lombok.Getter;
 import org.jeasy.random.EasyRandomParameters;
+import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.randomizers.AbstractRandomizer;
-
-import java.util.function.Supplier;
 
 @Getter
 @Builder
 class VavrQueueRandomizer<T> extends AbstractRandomizer<Queue<T>> implements VavrCollectionRandomizer<T, Queue<T>> {
-	private Supplier<? extends T> valueRandomizer;
+	private Randomizer<? extends T> valueRandomizer;
 	private EasyRandomParameters.Range<Integer> collectionSizeRange;
 
 	@Override

@@ -22,57 +22,55 @@ import lombok.experimental.UtilityClass;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.api.Randomizer;
 
-import java.util.function.Supplier;
-
 @UtilityClass
 public class VavrRandomizers {
 	public static Randomizer<?> empty(Class<?> clazz) {
 		return VavrEmptyRandomizers.from(clazz).getOrNull();
 	}
 
-	public static <V> Randomizer<?> array(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> array(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrArrayRandomizer.<V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.valueRandomizer(valueRandomizer)
 				.build();
 	}
 
-	public static <V> Randomizer<?> vector(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> vector(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrVectorRandomizer.<V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.valueRandomizer(valueRandomizer)
 				.build();
 	}
 
-	public static <V> Randomizer<?> tree(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> tree(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrTreeRandomizer.<V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.valueRandomizer(valueRandomizer)
 				.build();
 	}
 
-	public static <V> Randomizer<?> queue(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> queue(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrQueueRandomizer.<V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.valueRandomizer(valueRandomizer)
 				.build();
 	}
 
-	public static <V> Randomizer<?> stream(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> stream(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrStreamRandomizer.<V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.valueRandomizer(valueRandomizer)
 				.build();
 	}
 
-	public static <V extends Comparable<V>> Randomizer<?> priorityQueue(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V extends Comparable<V>> Randomizer<?> priorityQueue(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrPriorityQueueRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer)
 				.collectionSizeRange(collectionSizeRange)
 				.build();
 	}
 
-	public static <K extends Comparable<K>, V> Randomizer<?> sortedMultimap(final Supplier<K> keyRandomizer, final Supplier<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <K extends Comparable<K>, V> Randomizer<?> sortedMultimap(final Randomizer<K> keyRandomizer, final Randomizer<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrMultimapRandomizer.<K, V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.keyRandomizer(keyRandomizer)
@@ -81,7 +79,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <K extends Comparable<K>, V> Randomizer<?> sortedMap(final Supplier<K> keyRandomizer, final Supplier<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <K extends Comparable<K>, V> Randomizer<?> sortedMap(final Randomizer<K> keyRandomizer, final Randomizer<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrMapRandomizer.<K, V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.keyRandomizer(keyRandomizer)
@@ -90,7 +88,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <V extends Comparable<V>> Randomizer<?> sortedSet(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V extends Comparable<V>> Randomizer<?> sortedSet(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrSetRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer)
 				.collectionSizeRange(collectionSizeRange)
@@ -98,14 +96,14 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <V> Randomizer<?> list(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> list(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrListRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer)
 				.collectionSizeRange(collectionSizeRange)
 				.build();
 	}
 
-	public static <K, V> Randomizer<?> linkedHashMap(final Supplier<K> keyRandomizer, final Supplier<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <K, V> Randomizer<?> linkedHashMap(final Randomizer<K> keyRandomizer, final Randomizer<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrMapRandomizer.<K, V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.keyRandomizer(keyRandomizer)
@@ -114,7 +112,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <K, V> Randomizer<?> hashMap(final Supplier<K> keyRandomizer, final Supplier<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <K, V> Randomizer<?> hashMap(final Randomizer<K> keyRandomizer, final Randomizer<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrMapRandomizer.<K, V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.keyRandomizer(keyRandomizer)
@@ -123,7 +121,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <K, V> Randomizer<?> hashMultimap(final Supplier<K> keyRandomizer, final Supplier<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <K, V> Randomizer<?> hashMultimap(final Randomizer<K> keyRandomizer, final Randomizer<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrMultimapRandomizer.<K, V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.keyRandomizer(keyRandomizer)
@@ -132,7 +130,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <K, V> Randomizer<?> linkedHashMultimap(final Supplier<K> keyRandomizer, final Supplier<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <K, V> Randomizer<?> linkedHashMultimap(final Randomizer<K> keyRandomizer, final Randomizer<V> valueRandomizers, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrMultimapRandomizer.<K, V>builder()
 				.collectionSizeRange(collectionSizeRange)
 				.keyRandomizer(keyRandomizer)
@@ -141,7 +139,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <V> Randomizer<?> hashSet(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> hashSet(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrSetRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer)
 				.collectionSizeRange(collectionSizeRange)
@@ -149,7 +147,7 @@ public class VavrRandomizers {
 				.build();
 	}
 
-	public static <V> Randomizer<?> linkedHashSet(final Supplier<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
+	public static <V> Randomizer<?> linkedHashSet(final Randomizer<V> valueRandomizer, final EasyRandomParameters.Range<Integer> collectionSizeRange) {
 		return VavrSetRandomizer.<V>builder()
 				.valueRandomizer(valueRandomizer)
 				.collectionSizeRange(collectionSizeRange)

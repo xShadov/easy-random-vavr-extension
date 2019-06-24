@@ -19,21 +19,21 @@ package io.github.xshadov.easyrandom.vavr.randomizers;
 
 import io.vavr.collection.List;
 import org.jeasy.random.EasyRandomParameters;
+import org.jeasy.random.api.Randomizer;
 
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 interface VavrCollectionRandomizer<T, C> {
 	int ATTEMPT_THRESHOLD = 3;
 
-	Supplier<? extends T> getValueRandomizer();
+	Randomizer<? extends T> getValueRandomizer();
 
 	EasyRandomParameters.Range<Integer> getCollectionSizeRange();
 
 	default <A> C getRandomCollection(Collector<? super T, A, ? extends C> collector) {
 		final int count = VavrRandomizeUtils.randomSize(getCollectionSizeRange());
 
-		return List.fill(count, getValueRandomizer())
+		return List.fill(count, () -> getValueRandomizer().getRandomValue())
 				   .collect(collector);
 	}
 
@@ -46,7 +46,7 @@ interface VavrCollectionRandomizer<T, C> {
 		// we can't try forever, because randomizer might not be able to produce enough distinct values
 		int attempts = 0;
 		while (javaSet.size() < count && attempts++ < ATTEMPT_THRESHOLD * count) {
-			javaSet.add(getValueRandomizer().get());
+			javaSet.add(getValueRandomizer().getRandomValue());
 		}
 
 		return javaSet.stream().collect(collector);
