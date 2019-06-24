@@ -27,7 +27,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WithoutVavrTypesRandomizeTest {
+public class WithoutVavrTypesRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class SimpleTypes {
 		private Set rawSet;
@@ -46,7 +46,7 @@ public class WithoutVavrTypesRandomizeTest {
 
 	@Test
 	public void lackOfVavrTypesIsNotBreakingAnything() {
-		final SimpleTypes result = VavrGenerationTests.random(SimpleTypes.class);
+		final SimpleTypes result = random(SimpleTypes.class);
 
 		assertThat(result.getRawSet()).isNotNull();
 		assertThat(result.getRawMap()).isNotNull();

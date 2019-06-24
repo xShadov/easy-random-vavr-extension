@@ -24,9 +24,7 @@ import io.vavr.collection.Queue;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class QueueRandomizeTest {
+public class QueueRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private Queue<String> queue;
@@ -36,14 +34,14 @@ public class QueueRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getQueue().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getQueue());
 
-		assertThat(randomPerson.getArrayQueue().size()).isBetween(2, 5);
-		randomPerson.getArrayQueue().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getArrayQueue());
+		randomPerson.getArrayQueue().forEach(this::assertSizeInRange);
 
-		assertThat(randomPerson.getListQueue().size()).isBetween(2, 5);
-		randomPerson.getListQueue().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getListQueue());
+		randomPerson.getListQueue().forEach(this::assertSizeInRange);
 	}
 }

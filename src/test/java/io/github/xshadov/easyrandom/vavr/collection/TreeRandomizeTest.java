@@ -23,9 +23,7 @@ import io.vavr.collection.Tree;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class TreeRandomizeTest {
+public class TreeRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private Tree<String> tree;
@@ -34,11 +32,11 @@ public class TreeRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getTree().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getTree());
 
-		assertThat(randomPerson.getListTree().size()).isBetween(2, 5);
-		randomPerson.getListTree().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getListTree());
+		randomPerson.getListTree().forEach(this::assertSizeInRange);
 	}
 }

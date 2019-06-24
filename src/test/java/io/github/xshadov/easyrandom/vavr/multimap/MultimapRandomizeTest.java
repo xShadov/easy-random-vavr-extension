@@ -22,9 +22,7 @@ import io.vavr.collection.Multimap;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class MultimapRandomizeTest {
+public class MultimapRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private Multimap<String, Integer> integerMultimap;
@@ -33,10 +31,10 @@ public class MultimapRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getIntegerMultimap().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getIntegerMultimap());
 
-		assertThat(randomPerson.getStringMultimap().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getStringMultimap());
 	}
 }

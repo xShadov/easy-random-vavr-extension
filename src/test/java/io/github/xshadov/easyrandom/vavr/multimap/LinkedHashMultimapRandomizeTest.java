@@ -22,9 +22,7 @@ import io.vavr.collection.LinkedHashMultimap;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class LinkedHashMultimapRandomizeTest {
+public class LinkedHashMultimapRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private LinkedHashMultimap<String, Integer> integerMultimap;
@@ -33,10 +31,10 @@ public class LinkedHashMultimapRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getIntegerMultimap().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getIntegerMultimap());
 
-		assertThat(randomPerson.getStringMultimap().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getStringMultimap());
 	}
 }

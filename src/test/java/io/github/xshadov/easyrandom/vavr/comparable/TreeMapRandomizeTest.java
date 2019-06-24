@@ -25,9 +25,7 @@ import lombok.Value;
 import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class TreeMapRandomizeTest {
+public class TreeMapRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private TreeMap<String, Integer> simple;
@@ -38,35 +36,34 @@ public class TreeMapRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getSimple().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getSimple());
 
-		assertThat(randomPerson.getListMap().size()).isBetween(2, 5);
-		randomPerson.getListMap().forEach((key, value) -> assertThat(value.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getListMap());
+		randomPerson.getListMap().forEach((key, value) -> assertSizeInRange(value));
 
-		assertThat(randomPerson.getNestedMap().size()).isBetween(2, 5);
-		randomPerson.getNestedMap().forEach((key, value) -> assertThat(value.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getNestedMap());
+		randomPerson.getNestedMap().forEach((key, value) -> assertSizeInRange(value));
 	}
 
 	@Test
 	public void randomizationWithConstantRanges() {
-		final EasyRandomParameters parameters = new EasyRandomParameters()
-				.collectionSizeRange(2, 5)
+		final EasyRandomParameters parameters = defaultParameters()
 				.randomize(String.class, () -> "constant")
 				.randomize(Integer.class, () -> 123);
 
-		final Person randomPerson = VavrGenerationTests.random(Person.class, parameters);
+		final Person randomPerson = random(Person.class, parameters);
 
-		assertThat(randomPerson.getSimple().size()).isEqualTo(1);
+		assertHasSingleElement(randomPerson.getSimple());
 
-		assertThat(randomPerson.getListMap().size()).isEqualTo(1);
-		randomPerson.getListMap().forEach((key, value) -> assertThat(value.size()).isBetween(2, 5));
+		assertHasSingleElement(randomPerson.getListMap());
+		randomPerson.getListMap().forEach((key, value) -> assertSizeInRange(value));
 
-		assertThat(randomPerson.getSetMap().size()).isEqualTo(1);
-		randomPerson.getSetMap().forEach((key, value) -> assertThat(value.size()).isEqualTo(1));
+		assertHasSingleElement(randomPerson.getSetMap());
+		randomPerson.getSetMap().forEach((key, value) -> assertHasSingleElement(value));
 
-		assertThat(randomPerson.getNestedMap().size()).isEqualTo(1);
-		randomPerson.getNestedMap().forEach((key, value) -> assertThat(value.size()).isEqualTo(1));
+		assertHasSingleElement(randomPerson.getNestedMap());
+		randomPerson.getNestedMap().forEach((key, value) -> assertHasSingleElement(value));
 	}
 }

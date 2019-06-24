@@ -24,9 +24,7 @@ import io.vavr.collection.Set;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class NestedPojosRandomizeTest {
+public class NestedPojosRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private Set<Address> adresses;
@@ -42,12 +40,12 @@ public class NestedPojosRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getAdresses().size()).isBetween(2, 5);
-		assertThat(randomPerson.getFriendAdressesMap().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getAdresses());
+		assertSizeInRange(randomPerson.getFriendAdressesMap());
 
-		assertThat(randomPerson.getAddressMap().size()).isBetween(2, 5);
-		randomPerson.getAddressMap().values().forEach(address -> assertThat(address.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getAddressMap());
+		randomPerson.getAddressMap().values().forEach(this::assertSizeInRange);
 	}
 }

@@ -17,23 +17,36 @@
 
 package io.github.xshadov.easyrandom.vavr;
 
+import io.vavr.collection.Traversable;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
 
-public class VavrGenerationTests {
-	public static <T> T random(Class<T> clazz) {
-		final EasyRandomParameters parameters = new EasyRandomParameters()
-				.collectionSizeRange(2, 5)
-				.stringLengthRange(2, 3);
+import static org.assertj.core.api.Assertions.assertThat;
 
-		return generator(parameters).nextObject(clazz);
+public class VavrGenerationTests {
+	public void assertSizeInRange(Traversable<?> traversable) {
+		assertThat(traversable.size()).isBetween(2, 5);
 	}
 
-	public static <T> T random(Class<T> clazz, EasyRandomParameters easyRandomParameters) {
+	public void assertHasSingleElement(Traversable traversable) {
+		assertThat(traversable.size()).isEqualTo(1);
+	}
+
+	public EasyRandomParameters defaultParameters() {
+		return new EasyRandomParameters()
+				.collectionSizeRange(2, 5)
+				.stringLengthRange(2, 3);
+	}
+
+	public <T> T random(Class<T> clazz) {
+		return generator(defaultParameters()).nextObject(clazz);
+	}
+
+	public <T> T random(Class<T> clazz, EasyRandomParameters easyRandomParameters) {
 		return generator(easyRandomParameters).nextObject(clazz);
 	}
 
-	private static EasyRandom generator(EasyRandomParameters easyRandomParameters) {
+	private EasyRandom generator(EasyRandomParameters easyRandomParameters) {
 		final VavrRandomizerRegistry vavrRandomizerRegistry = new VavrRandomizerRegistry();
 
 		final EasyRandom easyRandom = new EasyRandom(easyRandomParameters.randomizerRegistry(vavrRandomizerRegistry));

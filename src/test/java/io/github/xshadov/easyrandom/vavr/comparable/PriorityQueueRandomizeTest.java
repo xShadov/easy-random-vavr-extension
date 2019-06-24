@@ -22,9 +22,7 @@ import io.vavr.collection.PriorityQueue;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class PriorityQueueRandomizeTest {
+public class PriorityQueueRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private PriorityQueue<String> stringQueue;
@@ -33,9 +31,9 @@ public class PriorityQueueRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getStringQueue().size()).isBetween(2, 5);
-		assertThat(randomPerson.getIntegerQueue().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getStringQueue());
+		assertSizeInRange(randomPerson.getIntegerQueue());
 	}
 }

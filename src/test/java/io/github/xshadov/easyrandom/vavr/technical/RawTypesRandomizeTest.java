@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RawTypesRandomizeTest {
+public class RawTypesRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class SimpleTypes {
 		private Set set;
@@ -86,7 +86,7 @@ public class RawTypesRandomizeTest {
 
 	@Test
 	public void rawSimpleTypes() {
-		final SimpleTypes result = VavrGenerationTests.random(SimpleTypes.class);
+		final SimpleTypes result = random(SimpleTypes.class);
 
 		assertThat(result.getSet()).isNotNull();
 		assertThat(result.getList()).isNotNull();
@@ -119,7 +119,7 @@ public class RawTypesRandomizeTest {
 
 	@Test
 	public void rawNestedTypes() {
-		final NestedTypes result = VavrGenerationTests.random(NestedTypes.class);
+		final NestedTypes result = random(NestedTypes.class);
 
 		assertThat(result.getSet()).isNotNull();
 		assertThat(result.getList()).isNotNull();

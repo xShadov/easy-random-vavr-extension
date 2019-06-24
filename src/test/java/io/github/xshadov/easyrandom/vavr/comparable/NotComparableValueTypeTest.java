@@ -18,15 +18,22 @@
 package io.github.xshadov.easyrandom.vavr.comparable;
 
 import io.github.xshadov.easyrandom.vavr.VavrGenerationTests;
+import io.github.xshadov.easyrandom.vavr.exception.GenericParameterNotComparableException;
 import io.vavr.collection.PriorityQueue;
 import io.vavr.collection.SortedMap;
 import io.vavr.collection.SortedMultimap;
 import io.vavr.collection.SortedSet;
 import lombok.Value;
-import org.jeasy.random.ObjectCreationException;
+import org.junit.Rule;
 import org.junit.Test;
 
-public class NotComparableValueTypeTest {
+import static org.hamcrest.CoreMatchers.isA;
+
+@SuppressWarnings("deprecation")
+public class NotComparableValueTypeTest extends VavrGenerationTests {
+	@Rule
+	public org.junit.rules.ExpectedException expectedException = org.junit.rules.ExpectedException.none();
+
 	private static class NonComparable {
 
 	}
@@ -51,23 +58,31 @@ public class NotComparableValueTypeTest {
 		private PriorityQueue<NonComparable> value;
 	}
 
-	@Test(expected = ObjectCreationException.class)
+	@Test
 	public void setOfNonComparables() {
-		VavrGenerationTests.random(WithSet.class);
+		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
+
+		random(WithSet.class);
 	}
 
-	@Test(expected = ObjectCreationException.class)
+	@Test
 	public void mapOfNonComparables() {
-		VavrGenerationTests.random(WithMap.class);
+		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
+
+		random(WithMap.class);
 	}
 
-	@Test(expected = ObjectCreationException.class)
+	@Test
 	public void multimapOfNonComparables() {
-		VavrGenerationTests.random(WithMultimap.class);
+		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
+
+		random(WithMultimap.class);
 	}
 
-	@Test(expected = ObjectCreationException.class)
+	@Test
 	public void priorityQueueOfNonComparables() {
-		VavrGenerationTests.random(WithPriorityQueue.class);
+		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
+
+		random(WithPriorityQueue.class);
 	}
 }

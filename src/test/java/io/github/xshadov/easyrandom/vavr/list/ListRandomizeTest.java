@@ -22,9 +22,7 @@ import io.vavr.collection.List;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class ListRandomizeTest {
+public class ListRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private List<String> list;
@@ -33,11 +31,11 @@ public class ListRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getList().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getList());
 
-		assertThat(randomPerson.getNestedList().size()).isBetween(2, 5);
-		randomPerson.getNestedList().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getNestedList());
+		randomPerson.getNestedList().forEach(this::assertSizeInRange);
 	}
 }

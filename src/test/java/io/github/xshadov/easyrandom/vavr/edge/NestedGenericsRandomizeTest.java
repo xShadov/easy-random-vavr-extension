@@ -24,9 +24,7 @@ import io.vavr.collection.Set;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class NestedGenericsRandomizeTest {
+public class NestedGenericsRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class NestedGenerics {
 		private List<Set<List<Set<String>>>> nestedCollections;
@@ -36,27 +34,27 @@ public class NestedGenericsRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final NestedGenerics randomNested = VavrGenerationTests.random(NestedGenerics.class);
+		final NestedGenerics randomNested = random(NestedGenerics.class);
 
-		assertThat(randomNested.getNestedCollections().size()).isBetween(2, 5);
+		assertSizeInRange(randomNested.getNestedCollections());
 		randomNested.getNestedCollections().forEach(value -> {
-			assertThat(value.size()).isBetween(2, 5);
+			assertSizeInRange(value);
 
 			value.forEach(oneNest -> {
-				assertThat(oneNest.size()).isBetween(2, 5);
+				assertSizeInRange(oneNest);
 
-				oneNest.forEach(twoNest -> assertThat(twoNest.size()).isBetween(2, 5));
+				oneNest.forEach(this::assertSizeInRange);
 			});
 		});
 
-		assertThat(randomNested.getNestedMaps().keySet().size()).isBetween(2, 5);
+		assertSizeInRange(randomNested.getNestedMaps().keySet());
 		randomNested.getNestedMaps().values().forEach(value -> {
-			assertThat(value.size()).isBetween(2, 5);
+			assertSizeInRange(value);
 
 			value.values().forEach(oneNest -> {
-				assertThat(oneNest.size()).isBetween(2, 5);
+				assertSizeInRange(oneNest);
 
-				oneNest.values().forEach(twoNest -> assertThat(twoNest.size()).isBetween(2, 5));
+				oneNest.values().forEach(this::assertSizeInRange);
 			});
 		});
 	}

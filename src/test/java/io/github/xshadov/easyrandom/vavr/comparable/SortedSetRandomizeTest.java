@@ -23,9 +23,7 @@ import lombok.Value;
 import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class SortedSetRandomizeTest {
+public class SortedSetRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private SortedSet<String> stringSet;
@@ -34,10 +32,10 @@ public class SortedSetRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getStringSet().size()).isBetween(2, 5);
-		assertThat(randomPerson.getIntegerSet().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getStringSet());
+		assertSizeInRange(randomPerson.getIntegerSet());
 	}
 
 	@Test
@@ -47,9 +45,9 @@ public class SortedSetRandomizeTest {
 				.randomize(String.class, () -> "constant")
 				.randomize(Integer.class, () -> 123);
 
-		final Person randomPerson = VavrGenerationTests.random(Person.class, parameters);
+		final Person randomPerson = random(Person.class, parameters);
 
-		assertThat(randomPerson.getStringSet().size()).isEqualTo(1);
-		assertThat(randomPerson.getIntegerSet().size()).isEqualTo(1);
+		assertHasSingleElement(randomPerson.getStringSet());
+		assertHasSingleElement(randomPerson.getIntegerSet());
 	}
 }

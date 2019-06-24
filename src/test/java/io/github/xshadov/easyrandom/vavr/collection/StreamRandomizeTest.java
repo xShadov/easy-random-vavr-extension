@@ -23,9 +23,7 @@ import io.vavr.collection.Stream;
 import lombok.Value;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class StreamRandomizeTest {
+public class StreamRandomizeTest extends VavrGenerationTests {
 	@Value
 	private static class Person {
 		private Stream<String> stream;
@@ -34,11 +32,11 @@ public class StreamRandomizeTest {
 
 	@Test
 	public void correctRandomization() {
-		final Person randomPerson = VavrGenerationTests.random(Person.class);
+		final Person randomPerson = random(Person.class);
 
-		assertThat(randomPerson.getStream().size()).isBetween(2, 5);
+		assertSizeInRange(randomPerson.getStream());
 
-		assertThat(randomPerson.getListStream().size()).isBetween(2, 5);
-		randomPerson.getListStream().forEach(inner -> assertThat(inner.size()).isBetween(2, 5));
+		assertSizeInRange(randomPerson.getListStream());
+		randomPerson.getListStream().forEach(this::assertSizeInRange);
 	}
 }

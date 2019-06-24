@@ -30,7 +30,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.isA;
 
 @SuppressWarnings("deprecation")
-public class ParameterizedNonComparableValueTypeTest {
+public class ParameterizedNonComparableValueTypeTest extends VavrGenerationTests {
 	@Rule
 	public org.junit.rules.ExpectedException expectedException = org.junit.rules.ExpectedException.none();
 
@@ -58,27 +58,27 @@ public class ParameterizedNonComparableValueTypeTest {
 	public void sortedSetWithNonComparableParameterizedGenericParameter() {
 		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
 
-		VavrGenerationTests.random(WithParameterizedList.class);
+		random(WithParameterizedList.class);
 	}
 
 	@Test
 	public void sortedSetWithMultiplyNestedNonComparableParameterizedGenericParameter() {
 		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
 
-		VavrGenerationTests.random(WithMultiplyParametrizedList.class);
+		random(WithMultiplyParametrizedList.class);
 	}
 
 	@Test
 	public void sortedMapWithNonComparableParameterizedKey() {
 		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
 
-		VavrGenerationTests.random(WithNonComparableParameterizedMapKey.class);
+		random(WithNonComparableParameterizedMapKey.class);
 	}
 
 	@Test
 	public void sortedMultimapWithNonComparableParameterizedKey() {
 		expectedException.expectCause(isA(GenericParameterNotComparableException.class));
 
-		VavrGenerationTests.random(WithNonComparableParameterizedMultimapKey.class);
+		random(WithNonComparableParameterizedMultimapKey.class);
 	}
 }
