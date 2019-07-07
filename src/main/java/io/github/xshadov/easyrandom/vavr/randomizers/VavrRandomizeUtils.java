@@ -24,9 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @UtilityClass
 class VavrRandomizeUtils {
-	private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
-
 	static int randomSize(EasyRandomParameters.Range<Integer> range) {
-		return RANDOM.nextInt(range.getMin(), range.getMax());
+		return ThreadLocalRandom.current().nextInt(range.getMin(), range.getMax());
 	}
 }

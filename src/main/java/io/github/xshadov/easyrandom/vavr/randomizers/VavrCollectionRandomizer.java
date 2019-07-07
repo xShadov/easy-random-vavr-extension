@@ -24,7 +24,7 @@ import org.jeasy.random.api.Randomizer;
 import java.util.stream.Collector;
 
 interface VavrCollectionRandomizer<T, C> {
-	int ATTEMPT_THRESHOLD = 3;
+	long ATTEMPT_THRESHOLD = 3;
 
 	Randomizer<? extends T> getValueRandomizer();
 
@@ -39,13 +39,14 @@ interface VavrCollectionRandomizer<T, C> {
 
 	default <A> C getDistinctCollection(Collector<? super T, A, ? extends C> collector) {
 		final int count = VavrRandomizeUtils.randomSize(getCollectionSizeRange());
+		final long maxAttempts = ATTEMPT_THRESHOLD * count;
 
 		final java.util.Set<T> javaSet = new java.util.HashSet<>();
 
 		// attempt to fill set as close as possible to requested range
 		// we can't try forever, because randomizer might not be able to produce enough distinct values
-		int attempts = 0;
-		while (javaSet.size() < count && attempts++ < ATTEMPT_THRESHOLD * count) {
+		long attempts = 0;
+		while (javaSet.size() < count && attempts++ < maxAttempts) {
 			javaSet.add(getValueRandomizer().getRandomValue());
 		}
 
