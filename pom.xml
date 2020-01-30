@@ -6,7 +6,7 @@
 
 	<groupId>io.github.xshadov</groupId>
 	<artifactId>easy-random-vavr-extension</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>Easy-Random VAVR extension</name>
 
